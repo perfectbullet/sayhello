@@ -16,19 +16,37 @@ from sayhello.commands import forge, initdb
 
 class SayHelloTestCase(unittest.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         app.config.update(
             TESTING=True,
             WTF_CSRF_ENABLED=False,
             SQLALCHEMY_DATABASE_URI='sqlite:///:memory:'
         )
         db.create_all()
-        self.client = app.test_client()
-        self.runner = app.test_cli_runner()
+        print('setUpClass')
+        cls.client = app.test_client()
+        cls.runner = app.test_cli_runner()
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls):
         db.session.remove()
         db.drop_all()
+
+    # def setUp(self):
+    #     app.config.update(
+    #         TESTING=True,
+    #         WTF_CSRF_ENABLED=False,
+    #         SQLALCHEMY_DATABASE_URI='sqlite:///:memory:'
+    #     )
+    #     db.create_all()
+    #     print(db)
+    #     self.client = app.test_client()
+    #     self.runner = app.test_cli_runner()
+    #
+    # def tearDown(self):
+    #     db.session.remove()
+    #     db.drop_all()
 
     def test_app_exist(self):
         self.assertFalse(app is None)
